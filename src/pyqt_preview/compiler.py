@@ -59,9 +59,7 @@ class UICompiler:
                 print(f" Command: {' '.join(cmd)}")
 
             # Run the compiler
-            result = subprocess.run(
-                cmd, capture_output=True, text=True, check=True, timeout=30
-            )
+            result = subprocess.run(cmd, capture_output=True, text=True, check=True, timeout=30)
 
             if result.returncode == 0:
                 return True, f"Successfully compiled {ui_file.name}"
@@ -75,15 +73,12 @@ class UICompiler:
             compiler_cmd = self.config.get_ui_compiler_command()
             return (
                 False,
-                f"UI compiler '{compiler_cmd}' not found. "
-                "Please install the appropriate Qt tools.",
+                f"UI compiler '{compiler_cmd}' not found. Please install the appropriate Qt tools.",
             )
-        except (IOError, FileNotFoundError) as e:
+        except OSError as e:
             return False, f"Unexpected error: {e!s}"
 
-    def compile_all_ui_files(
-        self, directory: Optional[str] = None
-    ) -> tuple[int, int, list[str]]:
+    def compile_all_ui_files(self, directory: Optional[str] = None) -> tuple[int, int, list[str]]:
         """
         Compile all .ui files in the specified directory.
 
@@ -142,7 +137,7 @@ class UICompiler:
                 return result.stdout.strip()
             return None
 
-        except Exception:
+        except (OSError, subprocess.SubprocessError):
             return None
 
     def check_compiler_available(self) -> bool:
@@ -157,7 +152,7 @@ class UICompiler:
                 timeout=5,
             )
             return result.returncode == 0
-        except Exception:
+        except (OSError, subprocess.SubprocessError):
             return False
 
     def handle_file_change(self, changed_file: str) -> bool:

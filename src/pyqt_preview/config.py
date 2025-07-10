@@ -70,10 +70,7 @@ class Config:
         config_data: dict[str, Any] = {}
         if config_path.exists():
             if tomllib is None:
-                print(
-                    "Warning: tomllib not available. "
-                    "Please install tomli for Python < 3.11"
-                )
+                print("Warning: tomllib not available. Please install tomli for Python < 3.11")
                 return cls(**config_data)
 
             try:
@@ -86,7 +83,7 @@ class Config:
                 elif "pyqt-preview" in data:
                     config_data = data["pyqt-preview"]
 
-            except Exception as e:
+            except (OSError, tomllib.TOMLDecodeError) as e:
                 print(f"Warning: Could not load config file {config_path}: {e}")
 
         return cls(**config_data)
@@ -170,10 +167,7 @@ class Config:
         # Check framework
         valid_frameworks = ["auto", "pyqt5", "pyqt6", "pyside2", "pyside6"]
         if self.framework not in valid_frameworks:
-            errors.append(
-                f"Invalid framework '{self.framework}'. "
-                f"Must be one of: {valid_frameworks}"
-            )
+            errors.append(f"Invalid framework '{self.framework}'. Must be one of: {valid_frameworks}")
 
         # Check reload delay
         if self.reload_delay < 0:

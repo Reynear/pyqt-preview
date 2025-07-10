@@ -153,18 +153,14 @@ def run(
 
 @app.command()
 def init(
-    directory: Optional[str] = typer.Option(
-        None, "--dir", "-d", help="Directory to initialize (default: current directory)"
-    ),
+    directory: Optional[str] = typer.Option(None, "--dir", "-d", help="Directory to initialize (default: current directory)"),
     framework: str = typer.Option(
         "pyqt6",
         "--framework",
         "-f",
         help="GUI framework to use (pyqt5|pyqt6|pyside2|pyside6)",
     ),
-    force: bool = typer.Option(
-        False, "--force", help="Overwrite existing configuration"
-    ),
+    force: bool = typer.Option(False, "--force", help="Overwrite existing configuration"),
 ) -> None:
     """
     Initialize a new PyQt Preview configuration file.
@@ -177,9 +173,7 @@ def init(
     config_file = target_dir / ".pyqt-preview.toml"
 
     if config_file.exists() and not force:
-        console.print(
-            f"[yellow] Configuration file already exists: {config_file}[/yellow]"
-        )
+        console.print(f"[yellow] Configuration file already exists: {config_file}[/yellow]")
         console.print("Use --force to overwrite")
         raise typer.Exit(1)
 
@@ -219,9 +213,7 @@ verbose = false
 
 @app.command()
 def check(
-    config_file: Optional[str] = typer.Option(
-        None, "--config", "-c", help="Path to configuration file"
-    ),
+    config_file: Optional[str] = typer.Option(None, "--config", "-c", help="Path to configuration file"),
 ) -> None:
     """
     Check the current configuration and system requirements.
@@ -244,7 +236,7 @@ def check(
         console.print(f"   UI directory: {config.ui_dir or 'Same as watch directory'}")
         console.print(f"   Reload delay: {config.reload_delay}s")
 
-    except (IOError, FileNotFoundError) as e:
+    except (OSError, FileNotFoundError) as e:
         console.print(f"[red] Configuration error: {e}[/red]")
         config = Config()  # Use defaults
 
@@ -261,12 +253,7 @@ def check(
     console.print(f"\n[bold] Framework Check ({config.detect_framework()})[/bold]")
     framework = config.detect_framework()
 
-    framework_map = {
-        "pyqt5": "PyQt5",
-        "pyqt6": "PyQt6",
-        "pyside2": "PySide2",
-        "pyside6": "PySide6"
-    }
+    framework_map = {"pyqt5": "PyQt5", "pyqt6": "PyQt6", "pyside2": "PySide2", "pyside6": "PySide6"}
 
     framework_available = False
     if framework in framework_map:

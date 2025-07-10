@@ -27,9 +27,7 @@ class WindowState:
     """Manages window position and size state across reloads."""
 
     def __init__(self, state_file: Optional[Path] = None):
-        self.state_file = (
-            state_file or Path(tempfile.gettempdir()) / "pyqt_preview_state.json"
-        )
+        self.state_file = state_file or Path(tempfile.gettempdir()) / "pyqt_preview_state.json"
         self.state: dict[str, Any] = {}
         self.load()
 
@@ -40,7 +38,7 @@ class WindowState:
                 with self.state_file.open(encoding="utf-8") as f:
                     self.state = json.loads(f.read())
                 logger.debug(f"Loaded window state from {self.state_file}")
-        except Exception as e:
+        except (OSError, json.JSONDecodeError) as e:
             logger.debug(f"Could not load window state: {e}")
             self.state = {}
 
@@ -54,7 +52,7 @@ class WindowState:
             with self.state_file.open("w", encoding="utf-8") as f:
                 json.dump(self.state, f, indent=2)
             logger.debug(f"Saved window state to {self.state_file}")
-        except Exception as e:
+        except OSError as e:
             logger.debug(f"Could not save window state: {e}")
 
     def get_geometry(self) -> Optional[tuple[int, int, int, int]]:
@@ -69,7 +67,7 @@ class WindowState:
         try:
             if self.state_file.exists():
                 self.state_file.unlink()
-        except Exception as e:
+        except OSError as e:
             logger.debug(f"Could not remove state file: {e}")
 
 
@@ -104,9 +102,7 @@ class PreviewProcess:
             if self.config.preserve_window_state:
                 geometry = self.window_state.get_geometry()
                 if geometry:
-                    env["PYQT_PREVIEW_GEOMETRY"] = (
-                        f"{geometry[0]},{geometry[1]},{geometry[2]},{geometry[3]}"
-                    )
+                    env["PYQT_PREVIEW_GEOMETRY"] = f"{geometry[0]},{geometry[1]},{geometry[2]},{geometry[3]}"
 
             logger.info(f"Starting application: {self.script_path}")
 
@@ -116,7 +112,7 @@ class PreviewProcess:
             logger.info(f"Process started (PID: {self.process.pid})")
             return True
 
-        except Exception as e:
+        except (OSError, subprocess.SubprocessError) as e:
             logger.error(f"Failed to start application: {e}")
             return False
 
@@ -135,7 +131,7 @@ class PreviewProcess:
             except subprocess.TimeoutExpired:
                 self.process.kill()
                 self.process.wait()
-            except Exception as e:
+            except (OSError, subprocess.SubprocessError) as e:
                 logger.error(f"Error stopping process: {e}")
 
     def is_running(self) -> bool:
@@ -182,7 +178,7 @@ class PreviewEngine:
             else:
                 logger.error("Failed to restart application")
 
-        except Exception as e:
+        except (OSError, subprocess.SubprocessError) as e:
             logger.error(f"Error handling file change: {e}")
 
     def start(self) -> bool:
@@ -205,7 +201,7 @@ class PreviewEngine:
             logger.info("PyQt Preview started successfully")
             return True
 
-        except Exception as e:
+        except (OSError, SecurityError) as e:
             logger.error(f"Failed to start preview engine: {e}")
             return False
 
@@ -228,7 +224,7 @@ class PreviewEngine:
             self.is_running = False
             logger.info("PyQt Preview stopped")
 
-        except Exception as e:
+        except OSError as e:
             logger.error(f"Error stopping preview engine: {e}")
 
     def run(self) -> None:

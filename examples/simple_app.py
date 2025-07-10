@@ -147,9 +147,7 @@ class MainWindow(QMainWindow):
             message = f"Hello, {text}!"
             self.output_label.setText(f"{message} (Click #{self.click_count})")
         else:
-            self.output_label.setText(
-                f"Please enter some text! (Click #{self.click_count})"
-            )
+            self.output_label.setText(f"Please enter some text! (Click #{self.click_count})")
 
         # Clear input field
         self.input_field.clear()

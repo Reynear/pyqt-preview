@@ -49,9 +49,7 @@ class PreviewFileHandler(FileSystemEventHandler):
         # Check if file matches watch patterns
         matches_pattern = False
         for pattern in self.config.watch_patterns:
-            if fnmatch.fnmatch(str(path), pattern) or fnmatch.fnmatch(
-                path.name, pattern
-            ):
+            if fnmatch.fnmatch(str(path), pattern) or fnmatch.fnmatch(path.name, pattern):
                 matches_pattern = True
                 break
 

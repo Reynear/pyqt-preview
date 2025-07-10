@@ -171,9 +171,7 @@ class TestCLI:
                     config_file = Path(temp_dir) / "config.toml"
                     config_file.write_text("test config")
 
-                    result = self.runner.invoke(
-                        app, ["run", script_path, "--config", str(config_file)]
-                    )
+                    result = self.runner.invoke(app, ["run", script_path, "--config", str(config_file)])
 
                     assert result.exit_code == 0
                     mock_from_file.assert_called_once()
@@ -257,9 +255,7 @@ class TestCLI:
     def test_init_command_with_framework(self):
         """Test init command with specific framework."""
         with tempfile.TemporaryDirectory() as temp_dir:
-            result = self.runner.invoke(
-                app, ["init", "--dir", temp_dir, "--framework", "pyqt5"]
-            )
+            result = self.runner.invoke(app, ["init", "--dir", temp_dir, "--framework", "pyqt5"])
             assert result.exit_code == 0
 
             config_file = Path(temp_dir) / ".pyqt-preview.toml"

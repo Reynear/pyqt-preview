@@ -119,9 +119,7 @@ class TestUICompiler:
     @patch("subprocess.run")
     def test_compile_ui_file_failure(self, mock_run):
         """Test UI file compilation failure."""
-        mock_run.side_effect = subprocess.CalledProcessError(
-            1, ["pyuic6"], stderr="Compilation error"
-        )
+        mock_run.side_effect = subprocess.CalledProcessError(1, ["pyuic6"], stderr="Compilation error")
 
         with tempfile.TemporaryDirectory() as temp_dir:
             ui_file = Path(temp_dir) / "test.ui"
@@ -173,7 +171,7 @@ class TestUICompiler:
     @patch("subprocess.run")
     def test_compile_ui_file_unexpected_error(self, mock_run):
         """Test UI file compilation with unexpected error."""
-        mock_run.side_effect = RuntimeError("Unexpected error")
+        mock_run.side_effect = OSError("Unexpected error")
 
         with tempfile.TemporaryDirectory() as temp_dir:
             ui_file = Path(temp_dir) / "test.ui"
@@ -425,9 +423,7 @@ class TestUICompiler:
     @patch.object(UICompiler, "find_ui_files")
     @patch.object(UICompiler, "is_ui_file_newer")
     @patch.object(UICompiler, "compile_ui_file")
-    def test_handle_file_change_python_file_no_ui_updates(
-        self, mock_compile, mock_newer, mock_find
-    ):
+    def test_handle_file_change_python_file_no_ui_updates(self, mock_compile, mock_newer, mock_find):
         """Test handling Python file change when no UI files need updating."""
         mock_find.return_value = [Path("test.ui")]
         mock_newer.return_value = False
@@ -443,9 +439,7 @@ class TestUICompiler:
     @patch.object(UICompiler, "find_ui_files")
     @patch.object(UICompiler, "is_ui_file_newer")
     @patch.object(UICompiler, "compile_ui_file")
-    def test_handle_file_change_python_file_with_ui_updates(
-        self, mock_compile, mock_newer, mock_find
-    ):
+    def test_handle_file_change_python_file_with_ui_updates(self, mock_compile, mock_newer, mock_find):
         """Test handling Python file change when UI files need updating."""
         ui_file = Path("test.ui")
         mock_find.return_value = [ui_file]

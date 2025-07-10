@@ -151,11 +151,7 @@ class TestValidatePythonFile:
             file_path.write_text("print('Hello')")
 
             # Use relative path and symbolic links if possible
-            relative_path = (
-                file_path.relative_to(Path.cwd())
-                if file_path.is_relative_to(Path.cwd())
-                else file_path
-            )
+            relative_path = file_path.relative_to(Path.cwd()) if file_path.is_relative_to(Path.cwd()) else file_path
 
             result = validate_python_file(str(relative_path))
 
@@ -266,11 +262,7 @@ class TestValidateUIFile:
             file_path.write_text('<?xml version="1.0" encoding="UTF-8"?><ui></ui>')
 
             # Use relative path if possible
-            relative_path = (
-                file_path.relative_to(Path.cwd())
-                if file_path.is_relative_to(Path.cwd())
-                else file_path
-            )
+            relative_path = file_path.relative_to(Path.cwd()) if file_path.is_relative_to(Path.cwd()) else file_path
 
             result = validate_ui_file(str(relative_path))
 

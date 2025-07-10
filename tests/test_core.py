@@ -469,9 +469,7 @@ class TestPreviewEngine:
             engine = PreviewEngine(script_path, config)
 
             # Mock compiler and process
-            engine.compiler.handle_file_change = Mock(
-                return_value="Compiled successfully"
-            )
+            engine.compiler.handle_file_change = Mock(return_value="Compiled successfully")
             engine.process.restart = Mock(return_value=True)
 
             engine._on_file_change("test.ui")
@@ -513,7 +511,7 @@ class TestPreviewEngine:
             engine = PreviewEngine(script_path, config)
 
             # Mock process restart to raise exception
-            engine.process.restart = Mock(side_effect=RuntimeError("Test error"))
+            engine.process.restart = Mock(side_effect=OSError("Test error"))
 
             # Should not raise exception
             engine._on_file_change("test.py")
