@@ -1,0 +1,23 @@
+[tool.pyqt-preview]
+# Example configuration for PyQt Preview
+
+# GUI framework to use (pyqt5, pyqt6, pyside2, pyside6, auto)
+framework = "pyqt6"
+
+# UI compiler command (auto, pyuic5, pyuic6, pyside2-uic, pyside6-uic)
+ui_compiler = "auto"
+
+# File patterns to watch for changes
+watch_patterns = ["*.py", "*.ui"]
+
+# Patterns to ignore
+ignore_patterns = ["__pycache__", "*.pyc", "*.pyo", "*.pyd", ".git", ".venv", "venv", "demo.py"]
+
+# Delay before reloading (seconds)
+reload_delay = 0.3
+
+# Preserve window position and size across reloads
+preserve_window_state = true
+
+# Enable verbose logging
+verbose = false
