@@ -1,7 +1,6 @@
 # PyQt Preview - Live Preview Tool for PyQt GUI Development
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Code style: ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9%2B-blue)](https://www.python.org/downloads/)
 [![Development Status](https://img.shields.io/badge/status-alpha-orange.svg)](https://github.com/Reynear/pyqt-preview)
 
