@@ -36,7 +36,7 @@ jobs:
           uv pip install --system .[dev]
       - name: Type check with mypy
         run: |
-          uv run mypy src/pyqt_preview --ignore-missing-imports --warn-unused-ignores=False
+          uv run mypy src/pyqt_preview --ignore-missing-imports --no-warn-unused-ignores
       - name: Run tests
         run: |
           uv run pytest tests/ -v --cov=pyqt_preview --cov-report=xml --cov-report=term-missing
