@@ -3,21 +3,11 @@ Configuration management for PyQt Preview development tool.
 """
 
 import importlib.util
-import sys
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Optional
 
-# Handle tomllib import for different Python versions
-if sys.version_info >= (3, 11):
-    import tomllib
-else:
-    try:
-        import tomli as tomllib
-    except ImportError:
-        tomllib = None  # type: ignore
-
-tomllib: Any = tomllib
+import tomllib
 
 
 class ConfigError(Exception):
