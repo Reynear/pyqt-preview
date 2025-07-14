@@ -117,15 +117,15 @@ class PreviewProcess:
             if getattr(self.config, "keep_window_focus", False) and sys.platform == "darwin":
                 try:
                     # This AppleScript restores focus to the previously active app
-                    applescript = '''
+                    applescript = """
                     tell application "System Events"
                         set frontApp to name of first application process whose frontmost is true
                     end tell
                     delay 0.2
                     tell application frontApp to activate
-                    '''
+                    """
                     subprocess.Popen(["osascript", "-e", applescript])
-                except Exception as e:
+                except (OSError, subprocess.SubprocessError) as e:
                     logger.debug(f"Could not restore focus to previous app: {e}")
 
             logger.info(f"Process started (PID: {self.process.pid})")

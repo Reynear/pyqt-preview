@@ -57,8 +57,19 @@ def run(
     ui_dir: Optional[str] = typer.Option(None, "--ui-dir", help="Directory containing .ui files"),
     framework: Optional[str] = typer.Option(None, "--framework", "-f", help="PyQt framework to use"),
     reload_delay: Optional[float] = typer.Option(None, "--reload-delay", help="Delay before reload"),
-    preserve_state: Optional[bool] = typer.Option(None, "--preserve-state/--no-preserve-state", help="Preserve window position and size across reloads (geometry only; does not affect focus)"),
-    keep_window_focus: Optional[bool] = typer.Option(None, "--keep-window-focus/--no-keep-window-focus", help="Prevent PyQt window from stealing focus on macOS (restores focus to your editor after reload; does not affect window geometry)"),
+    preserve_state: Optional[bool] = typer.Option(
+        None,
+        "--preserve-state/--no-preserve-state",
+        help=("Preserve window position and size across reloads (geometry only; does not affect focus)"),
+    ),
+    keep_window_focus: Optional[bool] = typer.Option(
+        None,
+        "--keep-window-focus/--no-keep-window-focus",
+        help=(
+            "Prevent PyQt window from stealing focus on macOS "
+            "(restores focus to your editor after reload; does not affect window geometry)"
+        ),
+    ),
     verbose: Optional[bool] = typer.Option(None, "--verbose", "-v", help="Enable verbose logging"),
     config_file: Optional[str] = typer.Option(None, "--config", "-c", help="Path to configuration file"),
 ) -> None:
