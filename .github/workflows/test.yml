@@ -15,43 +15,46 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
         python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
     steps:
-    - uses: actions/checkout@v4
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v4
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Cache Python dependencies
-      uses: actions/cache@v4
-      with:
-        path: |
-          ~/.cache/pip
-          ~/.cache/uv
-        key: python-${{ runner.os }}-${{ matrix.python-version }}-uv-${{ hashFiles('uv.lock') }}
-        restore-keys: |
-          python-${{ runner.os }}-${{ matrix.python-version }}-uv-
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install uv
-        uv sync --dev
-    - name: Lint with ruff
-      run: |
-        uv run ruff check src tests
-        uv run ruff format --check src tests
-    - name: Type check with mypy
-      run: |
-        uv run mypy src/pyqt_preview --ignore-missing-imports
-    - name: Run tests
-      run: |
-        uv run pytest tests/ -v --cov=pyqt_preview --cov-report=xml --cov-report=term-missing
-    - name: Upload coverage to Codecov
-      if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.11'
-      uses: codecov/codecov-action@v3
-      with:
-        file: ./coverage.xml
-        flags: unittests
-        name: codecov-umbrella
-        fail_ci_if_error: false
+      - uses: actions/checkout@v4
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Cache Python dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/pip
+            ~/.cache/uv
+          key: python-${{ runner.os }}-${{ matrix.python-version }}-uv-${{ hashFiles('uv.lock') }}
+          restore-keys: |
+            python-${{ runner.os }}-${{ matrix.python-version }}-uv-
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install uv
+          uv pip install .[dev]
+      - name: Check ruff installation
+        run: ruff --version
+      - name: Lint with ruff
+        run: |
+          ruff check src tests
+          ruff format --check src tests
+      - name: Type check with mypy
+        run: |
+          uv run mypy src/pyqt_preview --ignore-missing-imports
+      - name: Run tests
+        run: |
+          uv run pytest tests/ -v --cov=pyqt_preview --cov-report=xml --cov-report=term-missing
+      - name: Upload coverage to Codecov
+        if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.11'
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./coverage.xml
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: false
+
 
   security:
     runs-on: ubuntu-latest

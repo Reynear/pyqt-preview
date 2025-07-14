@@ -1,6 +1,5 @@
 version: 2
 updates:
-  # Enable version updates for Python dependencies
   - package-ecosystem: "uv"
     directory: "/"
     schedule:
@@ -41,6 +40,6 @@ updates:
       time: "09:00"
     open-pull-requests-limit: 5
     reviewers:
-      - "Reynear"  # Replace with your GitHub username
+      - "Reynear"  
     assignees:
-      - "Reynear"  # Replace with your GitHub username 
+      - "Reynear"   
