@@ -15,7 +15,7 @@ else:
     try:
         import tomli as tomllib
     except ImportError:
-        tomllib = None
+        tomllib = None  # type: ignore
 
 tomllib: Any = tomllib
 
