@@ -46,15 +46,6 @@ jobs:
       - name: Run tests
         run: |
           uv run pytest tests/ -v --cov=pyqt_preview --cov-report=xml --cov-report=term-missing
-      - name: Upload coverage to Codecov
-        if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.11'
-        uses: codecov/codecov-action@v3
-        with:
-          file: ./coverage.xml
-          flags: unittests
-          name: codecov-umbrella
-          fail_ci_if_error: false
-
 
   security:
     runs-on: ubuntu-latest

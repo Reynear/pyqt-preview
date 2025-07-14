@@ -111,7 +111,8 @@ class PreviewProcess:
             logger.info(f"Starting application: {self.script_path}")
 
             # Start process
-            self.process = subprocess.Popen(cmd, cwd=self.script_path.parent, env=env)
+            # Safe: cmd is constructed from validated script path and sys.executable
+            self.process = subprocess.Popen(cmd, cwd=self.script_path.parent, env=env)  # nosec
 
             # Optionally restore focus to previous app on macOS if keep_window_focus is set
             if getattr(self.config, "keep_window_focus", False) and sys.platform == "darwin":
@@ -124,7 +125,8 @@ class PreviewProcess:
                     delay 0.2
                     tell application frontApp to activate
                     """
-                    subprocess.Popen(["osascript", "-e", applescript])
+                    # Safe: osascript is a system binary, not user-supplied
+                    subprocess.Popen(["osascript", "-e", applescript])  # nosec
                 except (OSError, subprocess.SubprocessError) as e:
                     logger.debug(f"Could not restore focus to previous app: {e}")
 

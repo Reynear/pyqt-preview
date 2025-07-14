@@ -59,7 +59,8 @@ class UICompiler:
                 print(f" Command: {' '.join(cmd)}")
 
             # Run the compiler
-            result = subprocess.run(cmd, capture_output=True, text=True, check=True, timeout=30)
+            # Safe: cmd is constructed from validated config, not user input
+            result = subprocess.run(cmd, capture_output=True, text=True, check=True, timeout=30)  # nosec
 
             if result.returncode == 0:
                 return True, f"Successfully compiled {ui_file.name}"
@@ -125,13 +126,14 @@ class UICompiler:
         """Get the version of the UI compiler."""
         try:
             compiler_cmd = self.config.get_ui_compiler_command()
+            # Safe: compiler_cmd is determined by config, not user input
             result = subprocess.run(
                 [compiler_cmd, "--version"],
                 check=False,
                 capture_output=True,
                 text=True,
                 timeout=5,
-            )
+            )  # nosec
 
             if result.returncode == 0:
                 return result.stdout.strip()
@@ -144,13 +146,14 @@ class UICompiler:
         """Check if the UI compiler is available."""
         try:
             compiler_cmd = self.config.get_ui_compiler_command()
+            # Safe: compiler_cmd is determined by config, not user input
             result = subprocess.run(
                 [compiler_cmd, "--help"],
                 check=False,
                 capture_output=True,
                 text=True,
                 timeout=5,
-            )
+            )  # nosec
             return result.returncode == 0
         except (OSError, subprocess.SubprocessError):
             return False

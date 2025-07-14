@@ -112,19 +112,18 @@ watch_patterns = ["*.py"]
         with tempfile.NamedTemporaryFile(mode="w", suffix=".toml", delete=False) as f:
             f.write(toml_content)
             f.flush()
-
             config_path = Path(f.name)
 
-            try:
-                config = Config.from_file(config_path)
+        try:
+            config = Config.from_file(config_path)
 
-                assert config.framework == "pyqt5"
-                assert config.reload_delay == 1.5
-                assert config.verbose is True
-                assert config.watch_patterns == ["*.py"]
+            assert config.framework == "pyqt5"
+            assert config.reload_delay == 1.5
+            assert config.verbose is True
+            assert config.watch_patterns == ["*.py"]
 
-            finally:
-                config_path.unlink()
+        finally:
+            config_path.unlink()
 
     def test_config_from_missing_file(self):
         """Test loading configuration from missing file."""

@@ -9,6 +9,8 @@ from pathlib import Path
 from typing import Any, Optional
 
 # Handle tomllib import for different Python versions
+from typing import Optional, Any
+tomllib: Optional[Any] = None
 if sys.version_info >= (3, 11):
     import tomllib
 else:

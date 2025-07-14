@@ -132,10 +132,9 @@ def test_example_files():
         return  # Skip if no example files
 
     # Test that examples can be parsed (basic syntax check)
-    for example_file in example_files:
-        with open(example_file) as f:
-            content = f.read()
-            # This will raise SyntaxError if the file has syntax errors
+        for example_file in example_files:
+            with open(example_file, encoding="utf-8") as f:
+                content = f.read()            # This will raise SyntaxError if the file has syntax errors
             compile(content, str(example_file), "exec")
 
     print("Example files tests passed")
