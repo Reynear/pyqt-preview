@@ -2,8 +2,10 @@
 Comprehensive tests for PyQt Preview compiler module.
 """
 
+import os
 import subprocess
 import tempfile
+import time
 from pathlib import Path
 from unittest.mock import Mock, patch
 
@@ -262,10 +264,9 @@ class TestUICompiler:
 
             # Create files with different timestamps
             py_file.touch()
-            import time; time.sleep(1)
+            time.sleep(1)
             ui_file.touch()  # UI file is newer
             # Ensure .ui file is newer by setting its mtime
-            import os
             py_mtime = py_file.stat().st_mtime
             os.utime(ui_file, (py_mtime + 2, py_mtime + 2))
 
