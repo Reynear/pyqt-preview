@@ -2,8 +2,8 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Code style: ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
-[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
-[![Development Status](https://img.shields.io/badge/status-alpha-orange.svg)](https://github.com/your-username/pyqt-preview)
+[![Python 3.9+](https://img.shields.io/badge/python-3.9%2B-blue)](https://www.python.org/downloads/)
+[![Development Status](https://img.shields.io/badge/status-alpha-orange.svg)](https://github.com/Reynear/pyqt-preview)
 
 PyQt Preview is a development tool for PyQt5/PyQt6/PySide2/PySide6 GUI applications that provides live reloading when editing `.py` or `.ui` files—speeding up your development process. It works out of the box, is highly configurable, and supports advanced workflows for both beginners and professionals.
 
@@ -43,7 +43,7 @@ pyqt-preview run app.py --framework pyside6
 ```
 
 ### Requirements
-- Python 3.8+
+- Python 3.9+
 - PyQt5/PyQt6 or PySide2/PySide6
 - watchdog
 - For .ui file compilation: `pyuic6`, `pyuic5`, `pyside6-uic`, or `pyside2-uic` (install via PyQt/PySide tools)

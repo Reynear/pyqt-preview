@@ -18,7 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Cross-platform development setup automation
 
 ### Major Simplification  
-This release transforms PyQt Preview from a to a focused development tool.
+This release transforms PyQt Preview into a focused development tool.
 
 ### Removed
 - Health monitoring system (health.py deleted)
