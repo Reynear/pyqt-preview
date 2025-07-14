@@ -17,6 +17,8 @@ else:
     except ImportError:
         tomllib = None
 
+tomllib: Any = tomllib
+
 
 class ConfigError(Exception):
     """Raised when configuration validation fails."""
