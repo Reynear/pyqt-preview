@@ -58,6 +58,9 @@ class Config:
     # Logging
     verbose: bool = False
 
+    # Prevent PyQt window from stealing focus on macOS
+    keep_window_focus: bool = False
+
     @classmethod
     def from_file(cls, config_path: Optional[Path] = None) -> "Config":
         """Load configuration from a TOML file."""

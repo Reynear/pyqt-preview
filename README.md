@@ -5,7 +5,7 @@
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![Development Status](https://img.shields.io/badge/status-alpha-orange.svg)](https://github.com/your-username/pyqt-preview)
 
-A development tool for PyQt5/PyQt6 GUI applications that provides live reloading when editing `.py` or `.ui` files—speeding up the development process.
+PyQt Preview is a development tool for PyQt5/PyQt6/PySide2/PySide6 GUI applications that provides live reloading when editing `.py` or `.ui` files—speeding up your development process. It works out of the box, is highly configurable, and supports advanced workflows for both beginners and professionals.
 
 ## Features
 
@@ -16,6 +16,7 @@ A development tool for PyQt5/PyQt6 GUI applications that provides live reloading
 - **Zero Configuration**: Works out of the box with sensible defaults
 - **Preserve State**: Maintains window position and size across reloads
 - **Flexible Config**: TOML-based configuration with CLI overrides
+- **Verbose Logging**: Optional detailed output for debugging
 
 ## Quick Start
 
@@ -41,38 +42,19 @@ pyqt-preview run app.py --watch . --ui-dir ui/
 pyqt-preview run app.py --framework pyside6
 ```
 
-## Requirements
-
+### Requirements
 - Python 3.8+
 - PyQt5/PyQt6 or PySide2/PySide6
 - watchdog
+- For .ui file compilation: `pyuic6`, `pyuic5`, `pyside6-uic`, or `pyside2-uic` (install via PyQt/PySide tools)
 
 ## How It Works
 
-```
-┌────────────────────────────┐
-│ Developer edits UI files   │
-└────────────┬───────────────┘
-             ▼
-   ┌────────────────────┐
-   │ File Watcher       │
-   │ (watchdog)         │
-   └────────┬───────────┘
-            ▼
- ┌────────────────────────┐
- │ Build & Launch Handler │
- │ - Recompile .ui files  │
- │ - Restart GUI App      │
- └────────────┬───────────┘
-              ▼
-    ┌────────────────────┐
-    │ PyQt Preview Window │
-    └────────────────────┘
-```
+PyQt Preview watches your project files for changes, recompiles UI files if needed, and restarts your application automatically. Window geometry and focus can be preserved (see platform notes below).
 
 ## Configuration
 
-Create a `.pyqt-preview.toml` file in your project root:
+Create a `.pyqt-preview.toml` file in your project root for custom settings:
 
 ```toml
 [tool.pyqt-preview]
@@ -82,44 +64,18 @@ ignore_patterns = ["__pycache__", "*.pyc"]
 ui_compiler = "auto"  # auto, pyuic5, pyuic6, pyside2-uic, pyside6-uic
 preserve_window_state = true
 reload_delay = 0.5  # seconds
+verbose = true
 ```
+
+- **CLI flags always override config file and defaults.**
+- See `pyqt-preview --help` for all options.
 
 ## Examples
 
-### Example 1: Simple PyQt Application
-
-```python
-# app.py
-import sys
-from PyQt6.QtWidgets import QApplication, QMainWindow, QLabel
-
-class MainWindow(QMainWindow):
-    def __init__(self):
-        super().__init__()
-        self.setWindowTitle("My App")
-        self.setGeometry(100, 100, 400, 300)
-        
-        label = QLabel("Hello, PyQt!", self)
-        self.setCentralWidget(label)
-
-if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    window = MainWindow()
-    window.show()
-    sys.exit(app.exec())
-```
-
-Run with preview:
-```bash
-pyqt-preview run app.py
-```
-
-### Example 2: Using UI Files
-
-```bash
-# Create your UI in Qt Designer, save as main.ui
-pyqt-preview run app.py --watch . --ui-dir ui/
-```
+See the `examples/` directory for working applications:
+- `simple_app.py`: Basic PyQt6 app
+- `simple_pyqt5.py`: PyQt5 compatibility
+- `ui_app.py` + `demo.ui`: Qt Designer integration
 
 ## CLI Commands
 
@@ -139,24 +95,10 @@ Options:
   --framework TEXT      GUI framework (pyqt5|pyqt6|pyside2|pyside6)
   --reload-delay FLOAT  Delay before reload in seconds [default: 0.5]
   --preserve-state      Preserve window position and size
+  --keep-window-focus   Prevent PyQt window from stealing focus on macOS
   --config PATH         Path to configuration file
-  --verbose            Enable verbose logging
-  --help               Show this message and exit
-```
-
-**Examples:**
-```bash
-# Basic usage
-pyqt-preview run app.py
-
-# Watch specific directory with custom framework
-pyqt-preview run app.py --watch src/ --framework pyqt6
-
-# Custom reload delay and verbose output
-pyqt-preview run app.py --reload-delay 1.0 --verbose
-
-# Use custom configuration file
-pyqt-preview run app.py --config my-config.toml
+  --verbose             Enable verbose logging
+  --help                Show this message and exit
 ```
 
 ### `init` Command
@@ -169,23 +111,8 @@ pyqt-preview init [OPTIONS]
 Options:
   --dir PATH           Directory to initialize [default: current directory]
   --framework TEXT     GUI framework (pyqt5|pyqt6|pyside2|pyside6) [default: pyqt6]
-  --force             Overwrite existing configuration
-  --help              Show this message and exit
-```
-
-**Examples:**
-```bash
-# Create config in current directory
-pyqt-preview init
-
-# Create config for PyQt5 project
-pyqt-preview init --framework pyqt5
-
-# Initialize in specific directory
-pyqt-preview init --dir my-project/
-
-# Force overwrite existing config
-pyqt-preview init --force
+  --force              Overwrite existing configuration
+  --help               Show this message and exit
 ```
 
 ### `check` Command
@@ -200,21 +127,38 @@ Options:
   --help              Show this message and exit
 ```
 
-**Examples:**
-```bash
-# Check system with default config
-pyqt-preview check
-
-# Check with custom config file
-pyqt-preview check --config my-config.toml
-```
-
 ### Global Options
 
 ```bash
 pyqt-preview --version    # Show version and exit
 pyqt-preview --help       # Show help message
 ```
+
+## Window Focus Behavior Across Operating Systems
+
+PyQt Preview attempts to minimize disruption to your workflow when reloading the UI. On some operating systems, PyQt/Qt applications may steal window focus from your editor or terminal when reloaded or launched. This behavior and available workarounds vary by platform:
+
+| OS      | Focus Stealing Issue | Workarounds/Limitations                | Best Practice                |
+|---------|---------------------|----------------------------------------|------------------------------|
+| macOS   | Yes                 | AppleScript, but not 100% reliable     | Provide opt-in flag, document|
+| Windows | Yes                 | SetForegroundWindow, AutoHotkey, limited| Avoid, document limitation   |
+| Linux   | Yes                 | wmctrl/xdotool, fragile                | Avoid, respect WM policy     |
+
+- **macOS:** Use the `--keep-window-focus` flag (or `keep_window_focus = true` in config) to attempt to restore focus to your previously active app after UI reloads. This uses AppleScript and may not work with all editors or in all scenarios.
+- **Windows & Linux:** Focus stealing is restricted by OS policies. There is no reliable, cross-platform way to restore focus to your previous app. Attempts to do so may be blocked or behave inconsistently. PyQt Preview does not support focus restoration on these platforms.
+
+**Flag distinction:**
+- `--preserve-state` preserves the window position and size (geometry) across reloads. It does not affect which application is focused.
+- `--keep-window-focus` prevents the PyQt window from stealing focus on macOS, restoring focus to your editor or previously active app after reload. It does not affect window geometry.
+- These flags are independent and can be used together for best workflow experience.
+
+## Troubleshooting & FAQ
+
+- **UI compiler not found:** Install the appropriate Qt tools (`pyuic6`, `pyuic5`, `pyside6-uic`, `pyside2-uic`).
+- **Changes not detected:** Check your file patterns and ensure your editor saves files.
+- **Too many reloads:** Increase `reload_delay` and add more ignore patterns.
+- **Import errors after reload:** Check your `PYTHONPATH`, use absolute imports, and verify your project structure.
+- **Verbose output:** Use `--verbose` for detailed logs.
 
 ## Roadmap
 
@@ -228,62 +172,23 @@ pyqt-preview --help       # Show help message
 
 ### Planned Features
 - [ ] Hot widget replacement (soft reload without full restart)
-- [ ] Qt Designer integration
+- [ ] Qt Designer integration improvements
 - [ ] VS Code extension
 - [ ] Plugin system for custom reload behaviors
 - [ ] Remote preview capabilities
 - [ ] Template system for common PyQt patterns
+- [ ] AI/MCP integration (experimental/future)
 
 ## Documentation
 
-### Getting Started
+- **[Quick Start Guide](TUTORIAL.md)**
+- **[Complete Tutorial](docs/tutorials/getting-started.md)**
+- **[Examples](examples/README.md)**
+- **[Architecture Guide](docs/guides/architecture-guide.md)**
 
-- **[5-Minute Quick Start](TUTORIAL.md)** - Get running fast with essential examples
-- **[Complete Tutorial](docs/tutorials/getting-started.md)** - Comprehensive hands-on guide
-- **[Examples](examples/README.md)** - Working example applications
+## Development & Contributing
 
-### Advanced Documentation
-
-- **[Architecture Guide](docs/guides/architecture-guide.md)** - Detailed technical overview
-
-
-
-## Installation
-
-### From PyPI (Recommended)
-
-```bash
-pip install pyqt-preview
-```
-
-### From Source
-
-For the latest development version or to contribute:
-
-```bash
-# Clone the repository
-git clone https://github.com/your-username/pyqt-preview.git
-cd pyqt-preview
-
-# Quick setup with script (Unix/Linux/macOS)
-./scripts/setup-dev.sh
-
-# Or Windows
-scripts/setup-dev.bat
-
-# Or manual setup
-pip install -e ".[dev]"
-```
-
-## Development
-
-### Prerequisites
-
-- Python 3.8+
-- Git
-- PyQt5/PyQt6 or PySide2/PySide6
-
-### Setup Development Environment
+### Setup
 
 ```bash
 # Clone and enter directory
@@ -301,43 +206,29 @@ pip install -e ".[dev]"
 ### Running Tests
 
 ```bash
-# Run all tests
 pytest
-
-# Run with coverage
-pytest --cov=pyqt_preview
-
-# Run specific test file
-pytest tests/test_config.py
+pytest --cov=pyqt_preview --cov-report=html
 ```
 
 ### Code Quality
 
 ```bash
-# Format code
 black src/ tests/
 isort src/ tests/
-
-# Type checking
 mypy src/
-
-# Linting
 flake8 src/ tests/
 ```
 
 ### Building Distribution
 
 ```bash
-# Build wheel and source distribution
 python -m build
-
-# Install from local build
 pip install dist/pyqt_preview-*.whl
 ```
 
-## Contributing
+### Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines, code style, and PR process.
 
 ## License
 
@@ -348,7 +239,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Inspired by modern web development live reload tools
 - Built with the excellent [watchdog](https://github.com/gorakhargosh/watchdog) library
 - Thanks to the PyQt and Qt communities
-  
+
 ---
 
 **Made with love for the PyQt community**

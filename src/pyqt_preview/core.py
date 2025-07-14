@@ -104,10 +104,29 @@ class PreviewProcess:
                 if geometry:
                     env["PYQT_PREVIEW_GEOMETRY"] = f"{geometry[0]},{geometry[1]},{geometry[2]},{geometry[3]}"
 
+            # Pass keep window focus flag to subprocess if set and on macOS
+            if getattr(self.config, "keep_window_focus", False) and sys.platform == "darwin":
+                env["PYQT_PREVIEW_KEEP_FOCUS"] = "1"
+
             logger.info(f"Starting application: {self.script_path}")
 
             # Start process
             self.process = subprocess.Popen(cmd, cwd=self.script_path.parent, env=env)
+
+            # Optionally restore focus to previous app on macOS if keep_window_focus is set
+            if getattr(self.config, "keep_window_focus", False) and sys.platform == "darwin":
+                try:
+                    # This AppleScript restores focus to the previously active app
+                    applescript = '''
+                    tell application "System Events"
+                        set frontApp to name of first application process whose frontmost is true
+                    end tell
+                    delay 0.2
+                    tell application frontApp to activate
+                    '''
+                    subprocess.Popen(["osascript", "-e", applescript])
+                except Exception as e:
+                    logger.debug(f"Could not restore focus to previous app: {e}")
 
             logger.info(f"Process started (PID: {self.process.pid})")
             return True

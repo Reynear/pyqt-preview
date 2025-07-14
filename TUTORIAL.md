@@ -24,18 +24,18 @@ class HelloApp(QMainWindow):
         super().__init__()
         self.setWindowTitle("Hello PyQt Preview")  # Try changing this!
         self.setGeometry(100, 100, 400, 200)
-        
+
         widget = QWidget()
         self.setCentralWidget(widget)
         layout = QVBoxLayout(widget)
-        
+
         label = QLabel("Hello, World!")
         label.setStyleSheet("font-size: 24px; color: blue;")  # Try changing the color!
-        
+
         button = QPushButton("Click Me!")
         button.setStyleSheet("background-color: green; color: white; padding: 10px;")
         button.clicked.connect(lambda: label.setText("Button Clicked!"))
-        
+
         layout.addWidget(label)
         layout.addWidget(button)
 
@@ -52,13 +52,12 @@ if __name__ == "__main__":
 ### 2. Start PyQt Preview 
 
 ```bash
-pyqt-preview hello.py
+pyqt-preview run hello.py
 ```
 
 ### 3. Try Live Editing 
 
 With the app running, edit `hello.py`:
-
 - Change the window title
 - Change colors in stylesheets
 - Modify button text
@@ -100,7 +99,6 @@ Save as `ui_app.py`:
 ```python
 import sys
 from PyQt6.QtWidgets import QApplication, QMainWindow
-
 from simple import Ui_MainWindow  # Auto-compiled by PyQt Preview
 
 class UIApp(QMainWindow, Ui_MainWindow):
@@ -122,7 +120,7 @@ if __name__ == "__main__":
 ### 3. Run with Auto-Compilation
 
 ```bash
-pyqt-preview ui_app.py
+pyqt-preview run ui_app.py
 ```
 
 Edit the `.ui` file and watch both the UI compilation and app reload happen automatically!
@@ -137,7 +135,6 @@ framework = "pyqt6"
 reload_delay = 0.3
 preserve_window_state = true
 verbose = true
-
 watch_patterns = ["*.py", "*.ui"]
 ignore_patterns = ["__pycache__", "*.pyc"]
 ```
@@ -146,28 +143,36 @@ ignore_patterns = ["__pycache__", "*.pyc"]
 
 ```bash
 # Basic usage
-pyqt-preview app.py
+pyqt-preview run app.py
 
 # With verbose output
-pyqt-preview app.py --verbose
+pyqt-preview run app.py --verbose
 
 # Specify framework
-pyqt-preview app.py --framework pyqt5
+pyqt-preview run app.py --framework pyqt5
 
 # Check configuration
 pyqt-preview check
 ```
 
+## Troubleshooting & Tips
+
+- **UI compiler not found:** Install the appropriate Qt tools (`pyuic6`, `pyuic5`, `pyside6-uic`, `pyside2-uic`).
+- **Changes not detected:** Check your file patterns and ensure your editor saves files.
+- **Too many reloads:** Increase `reload_delay` and add more ignore patterns.
+- **Import errors after reload:** Check your `PYTHONPATH`, use absolute imports, and verify your project structure.
+- **Verbose output:** Use `--verbose` for detailed logs.
+
 ## Next Steps
 
 For detailed tutorials, advanced configuration, and troubleshooting:
-
-👉 **[Complete Tutorial Guide](docs/tutorials/getting-started.md)**
+- **[Complete Tutorial Guide](docs/tutorials/getting-started.md)**
+- **Documentation:** See `docs/` directory
+- **Examples:** See `examples/` directory
 
 ## Need Help?
+- **Check verbose output:** `pyqt-preview run app.py --verbose`
+- **Verify setup:** `pyqt-preview check`
+- **Ask questions:** Open an issue on GitHub
 
-- **Check verbose output**: `pyqt-preview app.py --verbose`
-- **Verify setup**: `pyqt-preview check`  
-- **Documentation**: See `docs/` directory
-- **Examples**: See `examples/` directory
-
+Happy coding with PyQt Preview!

@@ -57,7 +57,8 @@ def run(
     ui_dir: Optional[str] = typer.Option(None, "--ui-dir", help="Directory containing .ui files"),
     framework: Optional[str] = typer.Option(None, "--framework", "-f", help="PyQt framework to use"),
     reload_delay: Optional[float] = typer.Option(None, "--reload-delay", help="Delay before reload"),
-    preserve_state: Optional[bool] = typer.Option(None, "--preserve-state/--no-preserve-state", help="Preserve window state"),
+    preserve_state: Optional[bool] = typer.Option(None, "--preserve-state/--no-preserve-state", help="Preserve window position and size across reloads (geometry only; does not affect focus)"),
+    keep_window_focus: Optional[bool] = typer.Option(None, "--keep-window-focus/--no-keep-window-focus", help="Prevent PyQt window from stealing focus on macOS (restores focus to your editor after reload; does not affect window geometry)"),
     verbose: Optional[bool] = typer.Option(None, "--verbose", "-v", help="Enable verbose logging"),
     config_file: Optional[str] = typer.Option(None, "--config", "-c", help="Path to configuration file"),
 ) -> None:
@@ -105,6 +106,7 @@ def run(
             "framework": framework or "auto",
             "reload_delay": reload_delay,
             "preserve_window_state": preserve_state,
+            "keep_window_focus": keep_window_focus,
             "verbose": verbose,
         }
 
@@ -196,6 +198,9 @@ reload_delay = 0.5
 
 # Preserve window position and size across reloads
 preserve_window_state = true
+
+# Prevent PyQt window from stealing focus on macOS
+keep_window_focus = false
 
 # Enable verbose logging
 verbose = false

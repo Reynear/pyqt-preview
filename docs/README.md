@@ -14,13 +14,13 @@ Welcome to the comprehensive documentation for PyQt Preview - the live preview t
 
 ## Advanced Features
 
-### AI Integration
-- **[Claude Setup](integration/claude-setup.md)** - Set up AI-powered GUI development with Claude
-- **[MCP Server Guide](integration/mcp-server-guide.md)** - Model Context Protocol server implementation
+### AI/MCP Integration (Experimental/Future)
+- **[Claude Setup](integration/claude-setup.md)** - Set up AI-powered GUI development with Claude *(planned)*
+- **[MCP Server Guide](integration/mcp-server-guide.md)** - Model Context Protocol server implementation *(planned)*
 
 ### IDE Integration
-- **[VS Code Extension](../vscode-extension/README.md)** - IDE integration with live preview
-- **[VS Code Development](../vscode-extension/DEVELOPMENT.md)** - Extension development guide
+- **[VS Code Extension](../vscode-extension/README.md)** - IDE integration with live preview *(planned)*
+- **[VS Code Development](../vscode-extension/DEVELOPMENT.md)** - Extension development guide *(planned)*
 
 ## Documentation Structure
 
@@ -30,27 +30,27 @@ docs/
 ├── guides/                   # Technical guides and references
 │   └── architecture-guide.md # Detailed technical documentation
 ├── tutorials/                # Step-by-step tutorials
-│   └── getting-started.md   # Complete beginner tutorial
-├── integration/              # Third-party integrations
-│   ├── claude-setup.md      # Claude AI integration
-│   └── mcp-server-guide.md  # MCP server documentation
+│   └── getting-started.md    # Complete beginner tutorial
+├── integration/              # Third-party integrations (future)
+│   ├── claude-setup.md       # Claude AI integration (future)
+│   └── mcp-server-guide.md   # MCP server documentation (future)
 ├── api/                      # API documentation (future)
 └── vision/                   # Project vision and potential
     └── ai-potential.md       # AI-GUI development vision
 ```
 
-## 🎯 Quick Navigation
+## Quick Navigation
 
 ### By User Type
 
-**🆕 New to PyQt Preview?**
+**New to PyQt Preview?**
 Start with the [Getting Started Tutorial](tutorials/getting-started.md)
 
 **Developer wanting to understand the internals?**
 Read the [Architecture Guide](guides/architecture-guide.md)
 
-**🤖 Interested in AI-powered GUI development?**
-Check out [Claude Integration](integration/claude-setup.md)
+**Interested in AI-powered GUI development?**
+Check out [Claude Integration](integration/claude-setup.md) *(planned)*
 
 **Want to contribute or extend?**
 See the [Contributing Guide](../CONTRIBUTING.md)
@@ -71,14 +71,14 @@ See the [Contributing Guide](../CONTRIBUTING.md)
 
 ## Documentation Status
 
-| Document | Status | Last Updated |
-|----------|--------|--------------|
-| Getting Started Tutorial | Complete | Current |
-| Architecture Guide | Complete | Current |
-| Claude Integration | Planned | Future |
-| MCP Server Guide | Planned | Future |
-| API Documentation | Planned | Future |
+| Document                | Status     | Last Updated |
+|------------------------|------------|--------------|
+| Getting Started Tutorial| Complete   | Current      |
+| Architecture Guide      | Complete   | Current      |
+| Claude Integration      | Planned    | Future       |
+| MCP Server Guide        | Planned    | Future       |
+| API Documentation       | Planned    | Future       |
 
 ---
 
-**Made with love for the PyQt community** 
+**Made with love for the PyQt community**
