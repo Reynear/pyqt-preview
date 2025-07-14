@@ -219,13 +219,6 @@ mypy src/
 flake8 src/ tests/
 ```
 
-### Building Distribution
-
-```bash
-python -m build
-pip install dist/pyqt_preview-*.whl
-```
-
 ### Contributing
 
 Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines, code style, and PR process.

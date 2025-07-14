@@ -18,7 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Cross-platform development setup automation
 
 ### Major Simplification  
-This release transforms PyQt Preview from a production-ready tool to a focused development tool.
+This release transforms PyQt Preview from a to a focused development tool.
 
 ### Removed
 - Health monitoring system (health.py deleted)
@@ -27,16 +27,10 @@ This release transforms PyQt Preview from a production-ready tool to a focused d
 - Production-ready configuration settings
 - Performance monitoring and restart limits
 
-### Simplified
-- Security module: 300+ lines → 80 lines (basic validation only)
-- Logging system: 400+ lines → 40 lines (simple console output)
-- Core engine: 550+ lines → 250 lines (removed monitoring integration)
-- Configuration: removed production settings and constraints
-
 ### Changed
-- Project status: Production/Stable → Development Status :: 3 - Alpha
+- Project status: Development Status :: 3 - Alpha
 - Dependencies: removed psutil, added pyqt5>=5.15.11
-- Documentation: simplified from enterprise marketing to development tool focus
+- Documentation:  added architecture-guide, getting started
 - Version: Updated to development status (0.2.0)
 
 ## [0.1.0] - 2025-01-XX
