@@ -108,6 +108,28 @@ class PreviewProcess:
             if getattr(self.config, "keep_window_focus", False) and sys.platform == "darwin":
                 env["PYQT_PREVIEW_KEEP_FOCUS"] = "1"
 
+            # Capture the previously active application BEFORE starting the PyQt process
+            previous_app = None
+            if getattr(self.config, "keep_window_focus", False) and sys.platform == "darwin":
+                try:
+                    # Get the name of the currently active application before we start the PyQt window
+                    get_active_app_script = """
+                    tell application "System Events"
+                        return name of first application process whose frontmost is true
+                    end tell
+                    """
+                    result = subprocess.run(
+                        ["osascript", "-e", get_active_app_script],
+                        capture_output=True,
+                        text=True,
+                        timeout=2
+                    )
+                    if result.returncode == 0:
+                        previous_app = result.stdout.strip()
+                        logger.debug(f"Captured active application: {previous_app}")
+                except (OSError, subprocess.SubprocessError, subprocess.TimeoutExpired) as e:
+                    logger.debug(f"Could not capture active application: {e}")
+
             logger.info(f"Starting application: {self.script_path}")
 
             # Start process
@@ -115,18 +137,18 @@ class PreviewProcess:
             self.process = subprocess.Popen(cmd, cwd=self.script_path.parent, env=env)  # nosec
 
             # Optionally restore focus to previous app on macOS if keep_window_focus is set
-            if getattr(self.config, "keep_window_focus", False) and sys.platform == "darwin":
+            if previous_app and getattr(self.config, "keep_window_focus", False) and sys.platform == "darwin":
                 try:
-                    # This AppleScript restores focus to the previously active app
-                    applescript = """
-                    tell application "System Events"
-                        set frontApp to name of first application process whose frontmost is true
+                    # Give the PyQt window a moment to open and steal focus
+                    time.sleep(0.5)
+                    # Restore focus to the previously active application
+                    restore_focus_script = f"""
+                    tell application "{previous_app}"
+                        activate
                     end tell
-                    delay 0.2
-                    tell application frontApp to activate
                     """
-                    # Safe: osascript is a system binary, not user-supplied
-                    subprocess.Popen(["osascript", "-e", applescript])  # nosec
+                    # Safe: osascript is a system binary, not user-supplied; previous_app comes from osascript output
+                    subprocess.Popen(["osascript", "-e", restore_focus_script])  # nosec
                 except (OSError, subprocess.SubprocessError) as e:
                     logger.debug(f"Could not restore focus to previous app: {e}")
 
